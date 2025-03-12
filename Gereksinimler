@@ -1,13 +1,13 @@
 Gereksinimler	 
-1-Kullanıcı oluştur : Yeni Kullanıcı Oluşturma 
-2-Giriş Yapma:Kullanıcıların kendi hesaplarına erişim sağlaması 
-3-Hesabı Sil:Var Olan Kullanıcının Hesabını Silme
-4-Workspacae oluşturma-Farklı konularda farklı yazılar yazılıcakken ayrı defterlerin oluşturması
+1-Kullanıcı oluştur : Yeni Kullanıcı Oluşturma (Sadettin Yiğit ÖZDEM)
+2-Giriş Yapma:Kullanıcıların kendi hesaplarına erişim sağlaması (Sadettin Yiğit ÖZDEM)
+3-Hesabı Sil:Var Olan Kullanıcının Hesabını Silme (Sadettin Yiğit ÖZDEM)
+4-Workspacae oluşturma-Farklı konularda farklı yazılar yazılıcakken ayrı defterlerin oluşturması (Sadettin Yiğit ÖZDEM)
 5-Favorileri Listeleme: (Deniz ŞAHİN)
 6-Sayfayı Favorilerden Kaldırma: (Deniz ŞAHİN)
 7-Sayfa Favorilere Ekleme – Kullanıcılar sık kullanılan sayfaları kaydedebilmeli.(Deniz ŞAHİN)
-8-Etiketleme Sistemi – Sayfalara etiket ekleyerek kategorize edebilme.
-9-Otomatik Kaydetme – Kullanıcılar sayfa oluştururken içeriğin kaybolmaması için otomatik kaydedilmeli.
+8-Etiketleme Sistemi – Sayfalara etiket ekleyerek kategorize edebilme. (Sadettin Yiğit ÖZDEM)
+9-Otomatik Kaydetme – Kullanıcılar sayfa oluştururken içeriğin kaybolmaması için otomatik kaydedilmeli. (Sadettin Yiğit ÖZDEM)
 10-Görsel Ekleme – Kullanıcılar metinlere görseller ekleyebilmeli.
 11-Geri Alma (Undo) ve Yeniden Yapma (Redo) – Kullanıcı yaptığı değişiklikleri geri alabilmeli.
 12-Sayfa Düzeni (Grid, Liste Görünümü) – Sayfalar liste veya grid şeklinde görüntülenebilmeli.(Deniz ŞAHİN)
