@@ -1,15 +1,15 @@
-# Yapay Zeka Asistanlı Kripto Cüzdan Yönetimi
-**Proje Tanımı:** Projenin ne iş yaptığını anlatan bir paragraflık tanıtım metni. 
+# étude 
+**Proje Tanımı:** Yapay Zeka destekli text editörü 
 
-Örnek: X isimli e-ticaret sitemiz, online alışveriş deneyimini kolay ve keyifli hale getirmek için tasarlandı. Geniş ürün yelpazemiz sayesinde müşterilerimize en iyi seçenekleri sunarken, kullanıcı dostu arayüzümüz ile de alışveriş yapmayı daha rahat hale getiriyoruz.Sitemizde yer alan ürünler, kaliteli ve güvenilir markaların en yeni ve trend ürünlerinden oluşuyor. Müşterilerimiz, aradıkları ürünleri hızlı ve kolay bir şekilde bulabilirken, aynı zamanda satın alma süreçlerinde de sorunsuz bir deneyim yaşayacaklar.Hızlı teslimat seçenekleri, güvenli ödeme sistemleri ve müşteri memnuniyetine önem veren satış sonrası hizmetlerimizle, X olarak müşterilerimizin beklentilerini en üst seviyede karşılamayı hedefliyoruz. Her zaman en iyi fiyatlarla, kaliteli ürünleri müşterilerimize sunmak için çalışıyoruz ve müşteri memnuniyeti bizim için her zaman önceliklidir.X e-ticaret sitemize hoş geldiniz, size hizmet vermek için sabırsızlanıyoruz.
+étude , not alma, görev yönetimi, veritabanları oluşturma ve takım içi işbirliği gibi birçok işlevi bir arada sunan bir dijital organizasyon aracıdır. Kullanıcılar, metin, tablo, liste, görsel ve daha birçok formatta içerik oluşturabilir ve bu içerikleri birbirleriyle ilişkilendirebilir. étude étude , kişisel kullanımda olduğu gibi ekiplerin birlikte çalışabileceği şekilde de kullanılabilir ve özelleştirilebilir . Hem bireysel hem de grup bazında verimli bir çalışma ortamı sağlar. Yapay zeka entegreli bir dijital organizasyon aracıdır .
 
-**Proje Kategorisi:** Finans , Kripto Para 
+**Proje Kategorisi:** Eğitim , Sanal Defter/Çevrimiçi Editor
 
-**Referans Uygulama:** --
+**Referans Uygulama:** [--](https://www.notion.com/)
 
 **Uygulama Adresi:** --
-
-**Grup Adı:** --
+.
+**Grup Adı:** famanas
 
 **Proje Ekibi:** Yunus Eren UYSAL , Saadettin Yiğit ÖZDEM , Yusuf Gökberk OLUK , Deniz ŞAHİN 
 
