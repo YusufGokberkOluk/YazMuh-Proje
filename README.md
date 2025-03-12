@@ -5,7 +5,7 @@
 
 **Proje Kategorisi:** Eğitim , Sanal Defter/Çevrimiçi Editor
 
-**Referans Uygulama:** [--](https://www.notion.com/)
+**Referans Uygulama:** [Notion.com](https://www.notion.com/)
 
 **Uygulama Adresi:** --
 .
