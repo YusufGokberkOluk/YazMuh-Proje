@@ -1,1 +1,26 @@
-ekle
+Gereksinimler	 
+1-Kullanıcı oluştur : Yeni Kullanıcı Oluşturma 
+2-Giriş Yapma:Kullanıcıların kendi hesaplarına erişim sağlaması 
+3-Hesabı Sil:Var Olan Kullanıcının Hesabını Silme
+4-Workspacae oluşturma-Farklı konularda farklı yazılar yazılıcakken ayrı defterlerin oluşturması
+5-Favorileri Listeleme:
+6-Sayfayı Favorilerden Kaldırma:
+7-Sayfa Favorilere Ekleme – Kullanıcılar sık kullanılan sayfaları kaydedebilmeli.
+8-Etiketleme Sistemi – Sayfalara etiket ekleyerek kategorize edebilme.
+9-Otomatik Kaydetme – Kullanıcılar sayfa oluştururken içeriğin kaybolmaması için otomatik kaydedilmeli.
+10-Görsel Ekleme – Kullanıcılar metinlere görseller ekleyebilmeli.
+11-Geri Alma (Undo) ve Yeniden Yapma (Redo) – Kullanıcı yaptığı değişiklikleri geri alabilmeli.
+12-Sayfa Düzeni (Grid, Liste Görünümü) – Sayfalar liste veya grid şeklinde görüntülenebilmeli.
+13-Sayfa İçinde Bölüm Başlıkları – Kullanıcılar sayfalarına farklı bölümler ekleyebilmeli.
+14-Favorileri Arama :
+15-Kullanıcı Yetkilendirme – Sayfaları sadece belirli kullanıcılar düzenleyebilmeli.
+16-Sayfa Paylaşımı (Sadece Okuma İzni) – Kullanıcılar link üzerinden sayfalarını sadece görüntüleme izniyle paylaşabilmeli.
+17-Ekip Çalışması için Sayfa Paylaşımı – Kullanıcılar belirli kişileri sayfalara davet edebilmeli.
+18-Gerçek Zamanlı Veri Senkronizasyonu – Sayfa değişiklikleri anında yansıtılmalı.
+19-Metin Tamamlama (Smart Writing) – Kullanıcının yazdığı metni devam ettiren AI destekli tamamlama.
+20-Takvim  – Görevleri takvimle senkronize edebilme.
+21-Yazım ve Dilbilgisi Kontrolü – AI, kullanıcının yazdığı metindeki hataları düzeltir.
+22-Çeviri Desteği – AI kullanarak notları farklı dillere çevirebilme.
+23-Otomatik Başlık Önerisi – AI, not içeriğine göre başlık önerileri sunar.
+24-Görsel Analiz ve OCR – Kullanıcı bir görsel yüklediğinde, AI metni okuyup içerik önerileri sunar.
+25-Yazı fontu değiştirme - yazı fontunun değiştirilmesi
