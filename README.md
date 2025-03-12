@@ -8,7 +8,7 @@
 **Referans Uygulama:** [Notion.com](https://www.notion.com/)
 
 **Uygulama Adresi:** --
-.
+
 **Grup Adı:** famanas
 
 **Proje Ekibi:** Yunus Eren UYSAL , Saadettin Yiğit ÖZDEM , Yusuf Gökberk OLUK , Deniz ŞAHİN 
