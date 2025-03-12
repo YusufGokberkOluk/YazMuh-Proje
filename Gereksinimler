@@ -8,15 +8,15 @@ Gereksinimler
 7-Sayfa Favorilere Ekleme – Kullanıcılar sık kullanılan sayfaları kaydedebilmeli.(Deniz ŞAHİN)
 8-Etiketleme Sistemi – Sayfalara etiket ekleyerek kategorize edebilme. (Sadettin Yiğit ÖZDEM)
 9-Otomatik Kaydetme – Kullanıcılar sayfa oluştururken içeriğin kaybolmaması için otomatik kaydedilmeli. (Sadettin Yiğit ÖZDEM)
-10-Görsel Ekleme – Kullanıcılar metinlere görseller ekleyebilmeli.
-11-Geri Alma (Undo) ve Yeniden Yapma (Redo) – Kullanıcı yaptığı değişiklikleri geri alabilmeli.
+10-Görsel Ekleme – Kullanıcılar metinlere görseller ekleyebilmeli.(Yusuf Gökberk OLUK)
+11-Geri Alma (Undo) ve Yeniden Yapma (Redo) – Kullanıcı yaptığı değişiklikleri geri alabilmeli.(Yusuf Gökberk OLUK)
 12-Sayfa Düzeni (Grid, Liste Görünümü) – Sayfalar liste veya grid şeklinde görüntülenebilmeli.(Deniz ŞAHİN)
 13-Sayfa İçinde Bölüm Başlıkları – Kullanıcılar sayfalarına farklı bölümler ekleyebilmeli.(Deniz ŞAHİN)
-14-Favorileri Arama :
-15-Kullanıcı Yetkilendirme – Sayfaları sadece belirli kullanıcılar düzenleyebilmeli.
-16-Sayfa Paylaşımı (Sadece Okuma İzni) – Kullanıcılar link üzerinden sayfalarını sadece görüntüleme izniyle paylaşabilmeli.
-17-Ekip Çalışması için Sayfa Paylaşımı – Kullanıcılar belirli kişileri sayfalara davet edebilmeli.
-18-Gerçek Zamanlı Veri Senkronizasyonu – Sayfa değişiklikleri anında yansıtılmalı.
+14-Favorileri Arama :Favoriler olarak alınan dosyaların sayfalar içinde aranması . (Deniz ŞAHİN)
+15-Kullanıcı Yetkilendirme – Sayfaları sadece belirli kullanıcılar düzenleyebilmeli.(Yusuf Gökberk OLUK)
+16-Sayfa Paylaşımı (Sadece Okuma İzni) – Kullanıcılar link üzerinden sayfalarını sadece görüntüleme izniyle paylaşabilmeli.(Yusuf Gökberk OLUK)
+17-Ekip Çalışması için Sayfa Paylaşımı – Kullanıcılar belirli kişileri sayfalara davet edebilmeli.(Yusuf Gökberk OLUK)
+18-Gerçek Zamanlı Veri Senkronizasyonu – Sayfa değişiklikleri anında yansıtılmalı.(Yusuf Gökberk OLUK)
 19-Metin Tamamlama (Smart Writing) – Kullanıcının yazdığı metni devam ettiren yapay zeka destekli tamamlama.(Yunus Eren Uysal)
 20-Takvim  – Görevleri takvimle senkronize edebilme.(Yunus Eren Uysal)
 21-Yazım ve Dilbilgisi Kontrolü – Yapay zeka, kullanıcının yazdığı metindeki yazım ve mantık hatalarını düzeltir.(Yunus Eren Uysal)
