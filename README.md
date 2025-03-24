@@ -16,7 +16,7 @@
 1. [Gereksinim Analizi](Gereksinimler.md) ,
 2. [Yunus Gereksinimler](YunusGereksinimler)
 3. [Yusuf Gereksinimler](YusufGereksinimler.md)
-4. [Yiğit Gereksinimler](YiğitGereksinimler.md)
+4. [Yiğit Gereksinimler](YigitGereksinimler.md)
 5. 
 6. [Durum Diyagramı](Durum-Diyagramı.md)
 7. [Durum Senaryoları](Durum-Senaryoları.md)
