@@ -13,9 +13,13 @@
 
 **Proje Ekibi:** Yunus Eren UYSAL , Saadettin Yiğit ÖZDEM , Yusuf Gökberk OLUK , Deniz ŞAHİN 
 
-1. [Gereksinim Analizi](Gereksinimler)
-2. [Durum Diyagramı](Durum-Diyagramı.md)
-3. [Durum Senaryoları](Durum-Senaryoları.md)
-4. [Front-End](Front-End.md)
-5. [Back-End](Back-End.md)
-6. [Video Sunum](Sunum.md)
+1. [Gereksinim Analizi](Gereksinimler.md) ,
+2. [Yunus Gereksinimler](YunusGereksinimler.md)
+3. [Yusuf Gereksinimler](YusufGereksinimler.md)
+4. [Yiğit Gereksinimler](YiğitGereksinimler.md)
+5. 
+6. [Durum Diyagramı](Durum-Diyagramı.md)
+7. [Durum Senaryoları](Durum-Senaryoları.md)
+8. [Front-End](Front-End.md)
+9. [Back-End](Back-End.md)
+10. [Video Sunum](Sunum.md)
