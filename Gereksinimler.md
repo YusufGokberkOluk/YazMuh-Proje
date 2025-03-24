@@ -49,6 +49,6 @@
 
 # Gereksinim Dağılımı
 1. [Deniz Gereksinimler](DenizGereksinimler.md) 
-2. [Yunus Gereksinimler](YunusGereksinimler)
+2. [Yunus Gereksinimler](YunusGereksinimler.md)
 3. [Yusuf Gereksinimler](YusufGereksinimler.md)
 4. [Yiğit Gereksinimler](YigitGereksinimler.md)
