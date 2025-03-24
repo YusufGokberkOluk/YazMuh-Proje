@@ -25,3 +25,7 @@
 24-Görsel Analiz ve OCR – Kullanıcı bir görsel yüklediğinde, yapay zeka metni okuyup içerik önerileri sunar.(Yunus Eren Uysal)
 
 # Gereksinim Dağılımı
+1. [Deniz Gereksinimler](DenizGereksinimler.md) 
+2. [Yunus Gereksinimler](YunusGereksinimler)
+3. [Yusuf Gereksinimler](YusufGereksinimler.md)
+4. [Yiğit Gereksinimler](YigitGereksinimler.md)
