@@ -14,7 +14,7 @@
 **Proje Ekibi:** Yunus Eren UYSAL , Saadettin Yiğit ÖZDEM , Yusuf Gökberk OLUK , Deniz ŞAHİN 
 
 1. [Gereksinim Analizi](Gereksinimler.md) ,
-2. [Yunus Gereksinimler](YunusGereksinimler.md)
+2. [Yunus Gereksinimler](YunusGereksinimler)
 3. [Yusuf Gereksinimler](YusufGereksinimler.md)
 4. [Yiğit Gereksinimler](YiğitGereksinimler.md)
 5. 
