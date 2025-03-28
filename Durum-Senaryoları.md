@@ -7,4 +7,4 @@
 [YUNUS EREN UYSAL DURUM SENARYOSU](https://drive.google.com/file/d/1NSROj2NRjvC9WGGxBkgdXW7Hjzo8632f/view?usp=sharing)
 
 
-[YUSUF GÖKBERK OLUK DURUM SENARYOSU](https://1drv.ms/w/c/4d7a1b59f77f8878/Ea6DJ4u59QNKu944gSekPIEBoRG7LWKHek3hAI0msSx5hw?e=Br3GFA)
+[YUSUF GÖKBERK OLUK DURUM SENARYOSU](https://drive.google.com/file/d/1DCRtROlSaQLaDql9EOCkuFADp-y08gBD/view?usp=drive_link)
