@@ -4,4 +4,4 @@
 [DENİZ ŞAHİN DURUM SENARYOSU](https://drive.google.com/file/d/1ubXy8Lh1vOZUuFCU5amseE7lyD8fKKpl/view?usp=sharing)
 
 
-[YUNUS EREN UYSAL DURUM SENARYOSU](https://drive.google.com/file/d/11JYajDA212J4PkRKpJHcMSZBmMT2i-4l/view?usp=sharing)
+[YUNUS EREN UYSAL DURUM SENARYOSU](https://drive.google.com/file/d/1NSROj2NRjvC9WGGxBkgdXW7Hjzo8632f/view?usp=sharing)
