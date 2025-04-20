@@ -1,4 +1,4 @@
-Frontend'i yayınladığınız domain adresi: http://frontend.com
+Frontend'i yayınladığınız domain adresi: [http://frontend.com](https://kzmid66cnujjgnyeu451.lite.vusercontent.net/)
 
 # Yunus Eren Uysal Frontend #
 1. Metin tamamlama için ai asistant pop up
