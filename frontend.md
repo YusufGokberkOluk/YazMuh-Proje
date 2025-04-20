@@ -15,3 +15,9 @@ Frontend'i yayınladığınız domain adresi: [http://frontend.com](https://kzmi
 2. Kullanıcı Yetkilendirme
 3. Sayfa Paylaşımı (Sadece Okuma İzni)
 4. Ekip Çalışması için Sayfa Paylaşımı
+
+# Deniz Şahin Frontend #
+1. Favorilere Ekleme
+2. Favorileri Listeleme
+3. Sayfa görünümü (Grid ve list)
+4. Başlık ekleme
