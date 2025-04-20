@@ -1,4 +1,4 @@
-Frontend'i yayınladığınız domain adresi: [https://v0-react-sidebar-component-lorqvaj10-famanas.vercel.app/sign-in](https://kzmid66cnujjgnyeu451.lite.vusercontent.net/)
+Frontend'i yayınladığınız domain adresi: [https://v0-react-sidebar-component-famanas.vercel.app/](https://kzmid66cnujjgnyeu451.lite.vusercontent.net/)
 sign-in yapmak için hesap
 Username:kullanici@etude.app
 Password:password123
