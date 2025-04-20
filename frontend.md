@@ -24,4 +24,16 @@ Password:password123
 2. Favorileri Listeleme
 3. Sayfa görünümü (Grid ve list)
 4. Başlık ekleme
-5. Favorilerden Silme
+
+# Sadettin Yiğit Özdem Frontend #
+1-Kullanıcı oluştur : Yeni Kullanıcı Oluşturma 
+
+2-Giriş Yapma:Kullanıcıların kendi hesaplarına erişim sağlaması
+
+3-Hesabı Sil:Var Olan Kullanıcının Hesabını Silme 
+
+4-Workspacae oluşturma-Farklı konularda farklı yazılar yazılıcakken ayrı defterlerin oluşturması 
+
+5-Görsel Ekleme – Kullanıcılar metinlere görseller ekleyebilmeli.
+
+6-Geri Alma (Undo) ve Yeniden Yapma (Redo) – Kullanıcı yaptığı değişiklikleri geri alabilmeli.
