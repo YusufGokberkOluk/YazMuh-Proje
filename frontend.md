@@ -1,9 +1,12 @@
 Frontend'i yayınladığınız domain adresi: http://frontend.com
 
 # Yunus Eren Uysal Frontend #
-1. Nav-Bar
-2. Takvim
-3. Ai-assistant(Pop up sayfası)
+1. Metin tamamlama için ai asistant pop up
+2. Yazım ve dilbilgisi düzeltme  için ai asistant pop up
+3. Çeviri desteği için ai asistant pop up
+4. Otomatik başlık önersisi için ai asistant pop up
+5. Ocr ve görsel analiz  için ai asistant pop up
+6. Takvim
 
 
 
