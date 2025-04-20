@@ -24,3 +24,4 @@ Password:password123
 2. Favorileri Listeleme
 3. Sayfa görünümü (Grid ve list)
 4. Başlık ekleme
+5. Favorilerden Silme
