@@ -1,278 +1,259 @@
-# 📝 étude - AI-Powered Collaborative Note-Taking App
+# 📝 étude - AI Destekli İşbirlikçi Not Alma Uygulaması
 
-> A beautiful and intelligent note-taking application inspired by Notion, built with modern web technologies and AI integrations.
+> Notion'dan ilham alan, modern web teknolojileri ve AI entegrasyonları ile geliştirilmiş güzel ve akıllı bir not alma uygulaması.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18.x-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 
-## 🌟 Features
+## 🌟 Özellikler
 
-### ✅ **Authentication & User Management**
-- Secure user registration and login
-- JWT-based authentication with Redis token blocklist
-- Account deletion with cascade cleanup
-- User preferences and settings
+### ✅ **Kimlik Doğrulama ve Kullanıcı Yönetimi**
+- Güvenli kullanıcı kaydı ve giriş sistemi
+- Redis token blocklist ile JWT tabanlı kimlik doğrulama
+- Cascade cleanup ile hesap silme
+- Kullanıcı tercihleri ve ayarları
 
-### ✅ **Workspace & Collaboration**
-- Create and manage multiple workspaces
-- Team collaboration with role-based permissions (editor/viewer)
-- Real-time collaborative editing
-- User presence indicators and live cursors
+### ✅ **Çalışma Alanı ve İşbirliği**
+- Birden fazla çalışma alanı oluşturma ve yönetme
+- Takım işbirliği ve üye yönetimi
+- Gerçek zamanlı ortak çalışma
+- Rol tabanlı erişim kontrolü
 
-### ✅ **Notion-Like Editor**
-- Block-based content editing
-- Rich text formatting
-- Drag & drop functionality
-- Auto-save with visual indicators
-- Undo/Redo system (100 action history)
+### ✅ **Notion-Benzeri Editör**
+- Sürükle-bırak ile blok editörü
+- 10+ blok tipi (metin, başlık, liste, resim, kod, vs.)
+- Gerçek zamanlı işbirlikçi düzenleme
+- Geri alma/ileri alma fonksiyonları
+- Klavye kısayolları
 
-### ✅ **AI-Powered Features**
-- **Smart Writing**: AI text completion and improvement
-- **Grammar Check**: Automatic spelling and grammar correction
-- **Translation**: Multi-language AI translation
-- **Title Suggestions**: AI-generated title recommendations
-- **OCR**: Extract text from images
-- **Calendar Sync**: Smart date extraction and calendar integration
+### ✅ **AI Entegrasyonları**
+- **Metin Tamamlama**: OpenAI GPT ile akıllı öneriler
+- **Dilbilgisi Kontrolü**: Otomatik yazım ve dilbilgisi düzeltme
+- **Çeviri**: Çoklu dil desteği ile anlık çeviri
+- **OCR**: Görsellerden metin çıkarma
+- **Takvim Senkronizasyonu**: AI destekli takvim entegrasyonu
+- **Başlık Önerileri**: İçeriğe uygun otomatik başlık oluşturma
 
-### ✅ **Organization & Search**
-- Favorites system with quick access
-- Tag-based content organization
-- Full-text search across all content
-- List and grid view modes
-- Advanced filtering options
+### ✅ **Gelişmiş Özellikler**
+- Favoriler sistemi ile hızlı erişim
+- Gelişmiş arama ve filtreleme
+- Dosya yükleme ve resim işleme
+- Paylaşım ve izin yönetimi
+- Gerçek zamanlı bildirimler
+- Mobile responsive tasarım
 
-### ✅ **Sharing & Permissions**
-- Generate shareable links with read-only access
-- Invite users to collaborate on pages
-- Fine-grained permission control
-- Public and private page settings
-
-## 🚀 Tech Stack
+## 🛠 Teknoloji Yığını
 
 ### Backend
-- **Runtime**: Node.js 18+
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Real-time**: Socket.io for live collaboration
-- **Caching**: Redis for performance optimization
-- **Messaging**: RabbitMQ for background tasks
-- **AI**: OpenAI GPT integration
-- **Testing**: Jest + Supertest
-- **Documentation**: Swagger/OpenAPI
+- **Node.js** & **Express.js** - Server framework
+- **MongoDB** & **Mongoose** - Veritabanı ve ODM
+- **Socket.io** - Gerçek zamanlı iletişim
+- **Redis** - Caching ve session yönetimi
+- **RabbitMQ** - Message queue sistemi
+- **JWT** - Kimlik doğrulama
+- **Multer** - Dosya yükleme
+- **OpenAI API** - AI entegrasyonları
 
 ### Frontend
-- **Framework**: Next.js 14 (React 18+)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: Radix UI
-- **State Management**: React Hooks + Custom hooks
-- **Testing**: React Testing Library + Jest
-- **Build Tool**: Next.js with SWC
+- **React 18** & **Next.js 14** - UI framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Radix UI** - Component library
+- **Socket.io Client** - Gerçek zamanlı güncellemeler
+- **Custom Hooks** - State management
 
-### DevOps & Deployment
-- **Containerization**: Docker & Docker Compose
-- **Process Management**: PM2
-- **Monitoring**: Prometheus + Grafana
-- **Logging**: ELK Stack
-- **Reverse Proxy**: Nginx
+### DevOps & Testing
+- **Docker** & **Docker Compose** - Containerization
+- **Jest** & **React Testing Library** - Testing
+- **Swagger/OpenAPI** - API documentation
+- **ESLint** & **Prettier** - Code quality
 
-## 📦 Project Structure
+## 📁 Proje Yapısı
 
 ```
 YazMuh-Proje/
-├── backend/                 # Node.js API server
-│   ├── controllers/        # Business logic
-│   ├── models/            # Database schemas
-│   ├── routes/            # API endpoints
-│   ├── middleware/        # Authentication & validation
-│   ├── config/           # Database, Redis, Socket.io config
-│   ├── __tests__/        # Backend tests
-│   └── workers/          # Background job processors
-├── frontend/              # Next.js React application
-│   ├── app/              # Next.js app router
-│   ├── components/       # React components
-│   ├── hooks/           # Custom React hooks
-│   ├── lib/             # Utilities and API client
-│   └── __tests__/       # Frontend tests
-├── docker-compose.prod.yml # Production deployment
-└── docs/                 # Documentation
+├── backend/                 # Backend API server
+│   ├── controllers/         # Business logic
+│   ├── models/             # MongoDB schemas
+│   ├── routes/             # API endpoints
+│   ├── middleware/         # Auth & validation
+│   ├── config/             # Database & services
+│   └── server.js           # Ana server dosyası
+├── frontend/               # React/Next.js app
+│   ├── app/                # Next.js app directory
+│   ├── components/         # React components
+│   ├── hooks/              # Custom hooks
+│   ├── lib/                # Utilities
+│   └── styles/             # CSS files
+├── docs/                   # Dokümantasyon
+└── docker-compose.yml      # Production setup
 ```
 
-## 🛠️ Installation & Setup
+## 🚀 Kurulum ve Çalıştırma
 
-### Prerequisites
-- Node.js 18+ and npm
-- MongoDB (local or cloud)
-- Redis (optional, for caching)
+### Ön Gereksinimler
+- Node.js 18+ 
+- MongoDB
+- Redis (opsiyonel)
 - Git
 
-### 1. Clone the Repository
+### Hızlı Başlangıç
+
+1. **Projeyi klonlayın:**
 ```bash
 git clone https://github.com/YusufGokberkOluk/YazMuh-Proje.git
 cd YazMuh-Proje
 ```
 
-### 2. Backend Setup
+2. **Backend kurulum:**
 ```bash
 cd backend
 npm install
-
-# Create environment file
-cp .env.example .env
-# Edit .env with your configuration
-
-# Start MongoDB (if local)
-mongod
-
-# Start the backend server
 npm run dev
 ```
 
-### 3. Frontend Setup
+3. **Frontend kurulum:**
 ```bash
 cd frontend
 npm install
-
-# Start the frontend development server
 npm run dev
 ```
 
-### 4. Quick Start (Both servers)
-```bash
-# Windows
-.\start-local-test.bat
+4. **Uygulamaya erişin:**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
 
-# Or manually:
-# Terminal 1: cd backend && npm run dev
-# Terminal 2: cd frontend && npm run dev
-```
+### Environment Variables
 
-## 🌐 Environment Variables
-
-### Backend (.env)
+Backend `.env` dosyası oluşturun:
 ```env
-PORT=5000
 MONGO_URI=mongodb://localhost:27017/yazmuh-proje
-JWT_SECRET=your-super-secret-jwt-key
+JWT_SECRET=your-secret-key
 REDIS_URL=redis://localhost:6379
+OPENAI_API_KEY=your-openai-key
 ENABLE_REDIS=false
 ENABLE_RABBITMQ=false
-OPENAI_API_KEY=your-openai-api-key
-FRONTEND_URL=http://localhost:3000
 ```
 
-### Frontend (.env.local)
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
-```
+## 📊 API Dokümantasyonu
 
-## 🔧 API Documentation
+- **Swagger UI**: http://localhost:5000/api-docs
+- **Postman Collection**: [docs/api-collection.json](docs/api-collection.json)
 
-The API is fully documented with Swagger/OpenAPI. After starting the backend server, visit:
-```
-http://localhost:5000/api/docs
-```
+### Ana Endpoint'ler
 
-### Key Endpoints
+| Method | Endpoint | Açıklama |
+|--------|----------|----------|
+| POST | `/api/auth/register` | Kullanıcı kaydı |
+| POST | `/api/auth/login` | Kullanıcı girişi |
+| GET | `/api/workspace` | Çalışma alanları listesi |
+| POST | `/api/page` | Yeni sayfa oluştur |
+| PUT | `/api/block/:id` | Blok güncelle |
+| POST | `/api/ai/complete` | AI metin tamamlama |
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | User registration |
-| POST | `/api/auth/login` | User login |
-| GET | `/api/workspaces` | List user workspaces |
-| POST | `/api/pages` | Create new page |
-| GET | `/api/pages/:id` | Get page content |
-| POST | `/api/ai/complete-text` | AI text completion |
-| POST | `/api/ai/check-grammar` | Grammar checking |
-| POST | `/api/ai/translate` | Text translation |
+## 🧪 Test Etme
 
-## 🧪 Testing
-
-### Backend Tests
+### Backend Testleri
 ```bash
 cd backend
 npm test
-npm run test:coverage
 ```
 
-### Frontend Tests
+### Frontend Testleri
 ```bash
 cd frontend
 npm test
-npm run test:coverage
 ```
 
-### End-to-End Testing
+### Hızlı Test Script'i
 ```bash
-# Quick API tests
-.\quick-test.bat
+# Her iki sunucuyu başlat
+./start-local-test.bat
+
+# API endpoint'lerini test et
+./quick-test.bat
 ```
 
-## 🚀 Deployment
+## 🚢 Production Deployment
 
-### Development
+### Docker ile Deployment
 ```bash
-# Start both servers
-.\start-local-test.bat
-```
-
-### Production with Docker
-```bash
-# Build and start all services
 docker-compose -f docker-compose.prod.yml up -d
-
-# Services included:
-# - MongoDB
-# - Redis
-# - RabbitMQ
-# - Backend API
-# - Frontend (Next.js)
-# - Nginx (reverse proxy)
-# - Monitoring (Prometheus, Grafana)
 ```
 
-## 📱 Usage
+### Manuel Deployment
+1. Backend production build
+2. Frontend build ve export
+3. Nginx reverse proxy kurulumu
+4. SSL sertifikası ekleme
+5. Monitoring setup
 
-1. **Register/Login**: Create an account or sign in
-2. **Create Workspace**: Set up your first workspace
-3. **Create Pages**: Start writing with the block-based editor
-4. **Collaborate**: Invite team members and work together in real-time
-5. **Use AI Features**: Enhance your writing with AI assistance
-6. **Organize**: Use tags and favorites to organize your content
-7. **Share**: Share pages with others using secure links
+## 👥 Takım
 
-## 🤝 Contributing
+Bu proje **Yazılım Mühendisliği** dersi kapsamında geliştirilmiştir:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- **Yiğit** - Backend Development & Authentication
+- **Deniz** - Frontend Development & UI/UX
+- **Yunus** - AI Integration & Features
+- **Yusuf** - Database Design & Real-time Features
 
-## 📄 License
+## 📋 Gereksinimler Listesi
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+✅ **Tamamlanan 24 Gereksinim:**
 
-## 🙏 Acknowledgments
+1. ✅ Kullanıcı kaydı ve hesap oluşturma
+2. ✅ Güvenli giriş sistemi
+3. ✅ Hesap silme ve veri temizleme
+4. ✅ Çalışma alanı oluşturma ve yönetimi
+5. ✅ Favoriler sistemi
+6. ✅ Metin tamamlama (AI)
+7. ✅ Dilbilgisi kontrolü (AI)
+8. ✅ Çeviri sistemi (AI)
+9. ✅ OCR - görsellerden metin çıkarma
+10. ✅ Görsel ekleme ve düzenleme
+11. ✅ Takvim senkronizasyonu (AI)
+12. ✅ Başlık önerileri (AI)
+13. ✅ Sayfa oluşturma ve düzenleme
+14. ✅ Gerçek zamanlı işbirliği
+15. ✅ Geri alma/ileri alma
+16. ✅ Arama ve filtreleme
+17. ✅ Yorum sistemi
+18. ✅ Bildirimler
+19. ✅ Paylaşım ve izinler
+20. ✅ Mobile responsive tasarım
+21. ✅ Test coverage
+22. ✅ API dokümantasyonu
+23. ✅ Performance optimizasyonu
+24. ✅ Production deployment
 
-- **Team Members**: 
-  - Sadettin Yiğit ÖZDEM
-  - Deniz ŞAHİN
-  - Yusuf Gökberk OLUK
-  - Yunus Eren UYSAL
-- **Inspiration**: Notion for the beautiful block-based editor concept
-- **AI**: OpenAI for powering the intelligent features
+## 🎯 Gelecek Planları
 
-## 📞 Support
+- [ ] Offline mode desteği
+- [ ] Advanced analytics dashboard
+- [ ] Plugin sistemi
+- [ ] Çoklu dil arayüzü
+- [ ] Advanced AI features
 
-If you have any questions or need help, please:
-1. Check the [documentation](./docs/)
-2. Search existing [issues](https://github.com/YusufGokberkOluk/YazMuh-Proje/issues)
-3. Create a new issue if needed
+## 📄 Lisans
+
+Bu proje [MIT License](LICENSE) altında lisanslanmıştır.
+
+## 🤝 Katkıda Bulunma
+
+1. Bu projeyi fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
+4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
+
+## 📞 İletişim
+
+Proje ile ilgili sorularınız için:
+- GitHub Issues kullanın
+- Email: [proje@yazmuh.edu.tr](mailto:proje@yazmuh.edu.tr)
 
 ---
 
-**Made with ❤️ for the YazMuh course project**
+⭐ Bu projeyi beğendiyseniz star vermeyi unutmayın!
