@@ -12,16 +12,74 @@ import {
   Wand2,
   MessageSquarePlus,
 } from "lucide-react"
+import { useState } from "react"
+import apiClient from "../lib/api"
 
 interface AiActionsPopupProps {
   onClose: () => void
   position?: { top: number; left: number } | null
+  selectedText?: string
+  onTextReplace?: (newText: string) => void
 }
 
-export default function AiActionsPopup({ onClose, position = null }: AiActionsPopupProps) {
-  const handleAction = (action: string) => {
-    console.log(`Trigger AI Action: ${action}`)
-    onClose()
+export default function AiActionsPopup({ onClose, position = null, selectedText = "", onTextReplace }: AiActionsPopupProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleAction = async (action: string) => {
+    if (!selectedText.trim()) {
+      setError("Please select some text first")
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      let response
+      switch (action) {
+        case "Smart Writing":
+          response = await apiClient.completeText(selectedText)
+          if (response.success && onTextReplace) {
+            onTextReplace(response.data.fullText)
+          }
+          break
+        case "Check Grammar":
+          response = await apiClient.checkGrammar(selectedText)
+          if (response.success && onTextReplace) {
+            onTextReplace(response.data.correctedText)
+          }
+          break
+        case "Translate":
+          response = await apiClient.translateText(selectedText, "Turkish")
+          if (response.success && onTextReplace) {
+            onTextReplace(response.data.translatedText)
+          }
+          break
+        case "Suggest Title":
+          response = await apiClient.suggestTitle(selectedText)
+          if (response.success && onTextReplace) {
+            onTextReplace(response.data.suggestedTitle)
+          }
+          break
+        case "Calendar Sync":
+          response = await apiClient.calendarSync(selectedText)
+          if (response.success) {
+            // You could implement a calendar component here
+            console.log('Calendar events extracted:', response.data.calendarData)
+            alert(`Found ${response.data.calendarData?.events?.length || 0} calendar events`)
+          }
+          break
+        default:
+          console.log(`Action not implemented: ${action}`)
+      }
+      onClose()
+    } catch (error) {
+      console.error(`AI Action failed: ${action}`, error)
+      setError("AI service is currently unavailable")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // If position is provided, use it for absolute positioning
@@ -58,14 +116,24 @@ export default function AiActionsPopup({ onClose, position = null }: AiActionsPo
 
         <div className="p-2">
           <div className="p-3 mb-2 bg-[#EDF4ED] rounded-md">
-            <p className="text-sm text-[#13262F]/80">What would you like AI to help you with today?</p>
+            <p className="text-sm text-[#13262F]/80">
+              {selectedText.trim() ? "What would you like AI to help you with?" : "Select some text first"}
+            </p>
+            {error && (
+              <p className="text-sm text-red-600 mt-1">{error}</p>
+            )}
           </div>
 
           <ul className="divide-y divide-[#ABD1B5]/30">
             <li>
               <button
                 onClick={() => handleAction("Smart Writing")}
-                className="flex items-center w-full p-3 text-left hover:bg-[#ABD1B5]/10 rounded-md transition-colors"
+                disabled={isLoading || !selectedText.trim()}
+                className={`flex items-center w-full p-3 text-left rounded-md transition-colors ${
+                  isLoading || !selectedText.trim() 
+                    ? "opacity-50 cursor-not-allowed" 
+                    : "hover:bg-[#ABD1B5]/10"
+                }`}
               >
                 <Wand2 className="h-5 w-5 mr-3 text-[#79B791]" />
                 <div>

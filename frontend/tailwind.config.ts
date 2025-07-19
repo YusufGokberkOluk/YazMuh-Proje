@@ -6,13 +6,21 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "*.{js,ts,jsx,tsx,mdx}"
+    "./hooks/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
+    "./*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
   	extend: {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			// Custom étude colors
+  			'etude-primary': '#79B791',
+  			'etude-secondary': '#EDF4ED',
+  			'etude-accent': '#ABD1B5',
+  			'etude-dark': '#13262F',
+  			'etude-light': '#f8faf8',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'

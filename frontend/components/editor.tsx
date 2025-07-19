@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import {
   Bold,
   Italic,
@@ -26,6 +26,9 @@ import {
 } from "lucide-react"
 import ShareModal from "./share-modal"
 import AiActionsPopup from "./ai-actions-popup"
+import { useUndoRedo } from "../hooks/use-undo-redo"
+import { useSocket } from "../hooks/use-socket"
+import apiClient from "../lib/api"
 
 // Create a simple Tooltip component at the top of the file
 function Tooltip({ children, label }: { children: React.ReactNode; label: string }) {
@@ -50,6 +53,7 @@ interface EditorProps {
   onChange?: (content: string) => void
   onTagsChange?: (tags: string[]) => void
   loading?: boolean
+  token?: string
 }
 
 export default function Editor({
@@ -61,8 +65,8 @@ export default function Editor({
   onChange,
   onTagsChange,
   loading = false,
+  token,
 }: EditorProps) {
-  const [content, setContent] = useState(initialContent)
   const [tags, setTags] = useState<string[]>(initialTags)
   const [newTag, setNewTag] = useState("")
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
@@ -70,10 +74,36 @@ export default function Editor({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [isAiActionsOpen, setIsAiActionsOpen] = useState(false)
   const [aiPosition, setAiPosition] = useState<{ top: number; left: number } | null>(null)
+  const [localSaveStatus, setLocalSaveStatus] = useState<SaveStatus>("idle")
+  const [selectedText, setSelectedText] = useState("")
+  const [textareaRef, setTextareaRef] = useState<HTMLTextAreaElement | null>(null)
+  const [dragActive, setDragActive] = useState(false)
+  const [activeUsers, setActiveUsers] = useState<{[key: string]: any}>({})
+  const [userCursors, setUserCursors] = useState<{[key: string]: {position: number, username: string, color: string}}>({})
+  const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set())
+
+  // Undo/Redo functionality
+  const {
+    state: content,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
+    setDebounced: setContentDebounced,
+    set: setContent
+  } = useUndoRedo({
+    initialState: initialContent,
+    maxHistorySize: 100
+  })
+
+  // Socket for real-time collaboration
+  const socket = useSocket({ token })
 
   useEffect(() => {
-    setContent(initialContent)
-  }, [initialContent])
+    if (initialContent !== content) {
+      setContent(initialContent, false) // Don't add to history
+    }
+  }, [initialContent, content, setContent])
 
   useEffect(() => {
     setTags(initialTags)
@@ -81,7 +111,8 @@ export default function Editor({
 
   // Handle save status changes
   useEffect(() => {
-    if (saveStatus === "saved") {
+    const currentStatus = saveStatus || localSaveStatus
+    if (currentStatus === "saved") {
       setHasUnsavedChanges(false)
       setShowSaved(true)
       const timer = setTimeout(() => {
@@ -89,21 +120,127 @@ export default function Editor({
       }, 2000) // Hide "Saved" message after 2 seconds
       return () => clearTimeout(timer)
     }
-  }, [saveStatus])
+  }, [saveStatus, localSaveStatus])
+
+  // Auto-save functionality
+  const saveContent = useCallback(async (contentToSave: string) => {
+    try {
+      setLocalSaveStatus("saving")
+      await apiClient.updatePage(pageId, { content: contentToSave })
+      setLocalSaveStatus("saved")
+      setHasUnsavedChanges(false)
+    } catch (error) {
+      console.error('Auto-save failed:', error)
+      setLocalSaveStatus("error")
+    }
+  }, [pageId])
+
+  // Join page for real-time collaboration
+  useEffect(() => {
+    if (socket.isConnected && pageId) {
+      socket.joinPage(pageId)
+
+      // Listen for real-time events
+      const handleUserJoined = (data: any) => {
+        setActiveUsers(prev => ({
+          ...prev,
+          [data.user.id]: data.user
+        }))
+      }
+
+      const handleUserLeft = (data: any) => {
+        setActiveUsers(prev => {
+          const updated = { ...prev }
+          delete updated[data.user.id]
+          return updated
+        })
+        setUserCursors(prev => {
+          const updated = { ...prev }
+          delete updated[data.user.id]
+          return updated
+        })
+      }
+
+      const handleCursorMoved = (data: any) => {
+        if (data.user.id !== socket.socket?.id) {
+          setUserCursors(prev => ({
+            ...prev,
+            [data.user.id]: {
+              position: data.cursor.position,
+              username: data.user.username,
+              color: `hsl(${data.user.id.slice(-6)}, 70%, 50%)`
+            }
+          }))
+        }
+      }
+
+      const handleUserTyping = (data: any) => {
+        setTypingUsers(prev => {
+          const updated = new Set(prev)
+          if (data.isTyping) {
+            updated.add(data.user.username)
+          } else {
+            updated.delete(data.user.username)
+          }
+          return updated
+        })
+      }
+
+      socket.on('user-joined-page', handleUserJoined)
+      socket.on('user-left-page', handleUserLeft)
+      socket.on('cursor-moved', handleCursorMoved)
+      socket.on('user-typing', handleUserTyping)
+      
+      return () => {
+        socket.leavePage(pageId)
+        socket.off('user-joined-page', handleUserJoined)
+        socket.off('user-left-page', handleUserLeft)
+        socket.off('cursor-moved', handleCursorMoved)
+        socket.off('user-typing', handleUserTyping)
+      }
+    }
+  }, [socket.isConnected, pageId, socket])
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value
-    setContent(newContent)
+    setContentDebounced(newContent) // Use debounced version for typing
     setHasUnsavedChanges(true)
     onChange?.(newContent)
+    
+    // Send typing indicator
+    if (socket.isConnected && pageId) {
+      socket.startTyping(pageId)
+      
+      // Stop typing after 1 second of inactivity
+      setTimeout(() => {
+        socket.stopTyping(pageId)
+      }, 1000)
+    }
+    
+    // Auto-save after 2 seconds of inactivity
+    setTimeout(() => saveContent(newContent), 2000)
   }
 
+  // Handle cursor position changes
+  const handleCursorMove = useCallback((e: React.SyntheticEvent<HTMLTextAreaElement>) => {
+    if (socket.isConnected && pageId && textareaRef) {
+      const position = textareaRef.selectionStart
+      socket.moveCursor(pageId, { position })
+    }
+  }, [socket.isConnected, pageId, textareaRef, socket])
+
   const handleUndo = () => {
-    console.log("Undo action")
+    if (canUndo) {
+      undo()
+      setHasUnsavedChanges(true)
+    }
   }
 
   const handleRedo = () => {
-    console.log("Redo action")
+    if (canRedo) {
+      redo()
+      setHasUnsavedChanges(true)
+    }
   }
 
   const handleBold = () => {
@@ -126,18 +263,77 @@ export default function Editor({
     console.log("Apply Paragraph style")
   }
 
-  const handleAddImage = () => {
-    console.log("Open image uploader")
+  const uploadImageFile = async (file: File) => {
+    try {
+      setLocalSaveStatus("saving")
+      const response = await apiClient.uploadFile(file)
+      if (response.success) {
+        // Insert image markdown at cursor position
+        const imageMarkdown = `![${file.name}](${response.data.url})\n`
+        const newContent = content + imageMarkdown
+        setContent(newContent, true) // Add to history
+        onChange?.(newContent)
+        setLocalSaveStatus("saved")
+        // Auto-save
+        setTimeout(() => saveContent(newContent), 500)
+      }
+    } catch (error) {
+      console.error('Image upload failed:', error)
+      setLocalSaveStatus("error")
+    }
   }
 
-  const handleAddTag = () => {
+  const handleAddImage = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        await uploadImageFile(file)
+      }
+    }
+    input.click()
+  }
+
+  // Drag and drop handlers
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true)
+    } else if (e.type === "dragleave") {
+      setDragActive(false)
+    }
+  }, [])
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0]
+      if (file.type.startsWith('image/')) {
+        await uploadImageFile(file)
+      }
+    }
+  }, [uploadImageFile])
+
+  const handleAddTag = async () => {
     if (newTag.trim() && !tags.includes(newTag.trim())) {
       const updatedTags = [...tags, newTag.trim()]
       setTags(updatedTags)
       setNewTag("")
       setHasUnsavedChanges(true)
-      console.log("Add tag:", newTag.trim())
       onTagsChange?.(updatedTags)
+      
+      // Save tag to backend
+      try {
+        await apiClient.updatePage(pageId, { tags: updatedTags })
+      } catch (error) {
+        console.error('Failed to save tag:', error)
+      }
     }
   }
 
@@ -145,13 +341,19 @@ export default function Editor({
     console.log("Filter by tag:", tag)
   }
 
-  const handleRemoveTag = (e: React.MouseEvent, tagToRemove: string) => {
+  const handleRemoveTag = async (e: React.MouseEvent, tagToRemove: string) => {
     e.stopPropagation() // Prevent triggering the tag click
     const updatedTags = tags.filter((tag) => tag !== tagToRemove)
     setTags(updatedTags)
     setHasUnsavedChanges(true)
-    console.log("Remove tag:", tagToRemove)
     onTagsChange?.(updatedTags)
+    
+    // Save updated tags to backend
+    try {
+      await apiClient.updatePage(pageId, { tags: updatedTags })
+    } catch (error) {
+      console.error('Failed to remove tag:', error)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -171,7 +373,14 @@ export default function Editor({
   }
 
   const handleOpenAiActions = (e: React.MouseEvent) => {
-    console.log("Open AI Actions for page:", pageId)
+    // Get selected text from textarea
+    if (textareaRef) {
+      const start = textareaRef.selectionStart
+      const end = textareaRef.selectionEnd
+      const selected = content.substring(start, end)
+      setSelectedText(selected)
+    }
+    
     // Get the position of the button to position the popup
     const button = e.currentTarget as HTMLButtonElement
     const rect = button.getBoundingClientRect()
@@ -182,11 +391,29 @@ export default function Editor({
   const handleCloseAiActions = () => {
     setIsAiActionsOpen(false)
     setAiPosition(null)
+    setSelectedText("")
+  }
+
+  const handleTextReplace = (newText: string) => {
+    if (textareaRef) {
+      const start = textareaRef.selectionStart
+      const end = textareaRef.selectionEnd
+      const beforeSelection = content.substring(0, start)
+      const afterSelection = content.substring(end)
+      const updatedContent = beforeSelection + newText + afterSelection
+      
+      setContent(updatedContent, true) // Add to history
+      onChange?.(updatedContent)
+      
+      // Auto-save
+      setTimeout(() => saveContent(updatedContent), 500)
+    }
   }
 
   // Render save status indicator
   const renderSaveStatus = () => {
-    switch (saveStatus) {
+    const currentStatus = saveStatus || localSaveStatus
+    switch (currentStatus) {
       case "saving":
         return (
           <div className="flex items-center text-blue-400 text-xs">
@@ -220,28 +447,40 @@ export default function Editor({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Only handle keyboard shortcuts with modifier keys
-      if (!(e.ctrlKey || e.metaKey)) return
-
-      switch (e.key.toLowerCase()) {
-        case "b":
-          e.preventDefault()
-          handleBold()
-          break
-        case "i":
-          e.preventDefault()
-          handleItalic()
-          break
-        case "s":
-          e.preventDefault()
-          // Save action
-          onChange?.(content)
-          break
-        case "/":
-          e.preventDefault()
-          // Show command palette (could be implemented later)
-          console.log("Command palette requested")
-          break
+      // Handle undo/redo shortcuts
+      if ((e.ctrlKey || e.metaKey)) {
+        switch (e.key.toLowerCase()) {
+          case "z":
+            e.preventDefault()
+            if (e.shiftKey) {
+              handleRedo() // Ctrl+Shift+Z for redo
+            } else {
+              handleUndo() // Ctrl+Z for undo
+            }
+            break
+          case "y":
+            e.preventDefault()
+            handleRedo() // Ctrl+Y for redo
+            break
+          case "b":
+            e.preventDefault()
+            handleBold()
+            break
+          case "i":
+            e.preventDefault()
+            handleItalic()
+            break
+          case "s":
+            e.preventDefault()
+            // Save action
+            saveContent(content)
+            break
+          case "/":
+            e.preventDefault()
+            // Show command palette (could be implemented later)
+            console.log("Command palette requested")
+            break
+        }
       }
     }
 
@@ -268,7 +507,24 @@ export default function Editor({
   }, [hasUnsavedChanges])
 
   return (
-    <div className="h-full w-full bg-white text-[#13262F] rounded-md shadow-sm overflow-hidden flex flex-col">
+    <div 
+      className={`h-full w-full bg-white text-[#13262F] rounded-md shadow-sm overflow-hidden flex flex-col relative ${
+        dragActive ? "border-2 border-dashed border-[#79B791] bg-[#EDF4ED]" : ""
+      }`}
+      onDragEnter={handleDrag}
+      onDragLeave={handleDrag}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+    >
+      {/* Drag overlay */}
+      {dragActive && (
+        <div className="absolute inset-0 bg-[#79B791]/10 border-2 border-dashed border-[#79B791] rounded-lg flex items-center justify-center z-20">
+          <div className="text-center">
+            <ImagePlus className="h-12 w-12 mx-auto text-[#79B791] mb-2" />
+            <p className="text-[#79B791] font-medium">Drop image here to upload</p>
+          </div>
+        </div>
+      )}
       {loading && (
         <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-10">
           <div className="flex flex-col items-center">
@@ -347,19 +603,29 @@ export default function Editor({
           {/* Undo/Redo Buttons */}
           <button
             onClick={handleUndo}
-            className="p-1.5 rounded-md hover:bg-[#ABD1B5]/10 transition-colors group"
+            disabled={!canUndo}
+            className={`p-1.5 rounded-md transition-colors group ${
+              canUndo 
+                ? "hover:bg-[#ABD1B5]/10 cursor-pointer" 
+                : "cursor-not-allowed opacity-40"
+            }`}
             aria-label="Undo"
-            title="Undo"
+            title="Undo (Ctrl+Z)"
           >
-            <Undo className="h-4 w-4 text-[#13262F]/70 group-hover:text-[#13262F]" />
+            <Undo className={`h-4 w-4 ${canUndo ? "text-[#13262F]/70 group-hover:text-[#13262F]" : "text-[#13262F]/30"}`} />
           </button>
           <button
             onClick={handleRedo}
-            className="p-1.5 rounded-md hover:bg-[#ABD1B5]/10 transition-colors group"
+            disabled={!canRedo}
+            className={`p-1.5 rounded-md transition-colors group ${
+              canRedo 
+                ? "hover:bg-[#ABD1B5]/10 cursor-pointer" 
+                : "cursor-not-allowed opacity-40"
+            }`}
             aria-label="Redo"
-            title="Redo"
+            title="Redo (Ctrl+Y)"
           >
-            <Redo className="h-4 w-4 text-[#13262F]/70 group-hover:text-[#13262F]" />
+            <Redo className={`h-4 w-4 ${canRedo ? "text-[#13262F]/70 group-hover:text-[#13262F]" : "text-[#13262F]/30"}`} />
           </button>
 
           <div className="h-5 w-px bg-[#ABD1B5]/30 mx-1"></div>
@@ -485,17 +751,53 @@ export default function Editor({
         </div>
       </div>
 
-      <textarea
-        value={content}
-        onChange={handleChange}
-        className="flex-1 w-full p-4 text-[#13262F] bg-white resize-none focus:outline-none focus:ring-0 border-0"
-        placeholder="Type '/' for commands"
-        aria-label={`Edit ${title}`}
-        aria-describedby={saveStatus === "error" ? "save-error" : undefined}
-      />
+      <div className="flex-1 relative">
+        <textarea
+          ref={setTextareaRef}
+          value={content}
+          onChange={handleChange}
+          onSelect={handleCursorMove}
+          onClick={handleCursorMove}
+          onKeyUp={handleCursorMove}
+          className="w-full h-full p-4 text-[#13262F] bg-white resize-none focus:outline-none focus:ring-0 border-0"
+          placeholder="Type '/' for commands"
+          aria-label={`Edit ${title}`}
+          aria-describedby={saveStatus === "error" ? "save-error" : undefined}
+        />
+        
+        {/* Active users indicator */}
+        {Object.keys(activeUsers).length > 0 && (
+          <div className="absolute top-2 right-2 flex space-x-1">
+            {Object.values(activeUsers).map((user: any) => (
+              <div
+                key={user.id}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white font-medium"
+                style={{ backgroundColor: `hsl(${user.id.slice(-6)}, 70%, 50%)` }}
+                title={user.username}
+              >
+                {user.username[0].toUpperCase()}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Typing indicator */}
+        {typingUsers.size > 0 && (
+          <div className="absolute bottom-2 left-4 text-xs text-[#13262F]/60">
+            {Array.from(typingUsers).join(', ')} {typingUsers.size === 1 ? 'is' : 'are'} typing...
+          </div>
+        )}
+      </div>
 
       {isShareModalOpen && <ShareModal pageId={pageId} onClose={handleCloseShareModal} />}
-      {isAiActionsOpen && <AiActionsPopup onClose={handleCloseAiActions} position={aiPosition} />}
+      {isAiActionsOpen && (
+        <AiActionsPopup 
+          onClose={handleCloseAiActions} 
+          position={aiPosition} 
+          selectedText={selectedText}
+          onTextReplace={handleTextReplace}
+        />
+      )}
     </div>
   )
 }

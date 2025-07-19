@@ -2,8 +2,9 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { X, Copy, Users, Link, Globe, Lock } from "lucide-react"
+import { useState, useEffect } from "react"
+import { X, Copy, Users, Link, Globe, Lock, Check } from "lucide-react"
+import apiClient from "../lib/api"
 
 interface ShareModalProps {
   pageId: string
@@ -15,24 +16,100 @@ type AccessLevel = "restricted" | "view" | "edit"
 export default function ShareModal({ pageId, onClose }: ShareModalProps) {
   const [email, setEmail] = useState("")
   const [accessLevel, setAccessLevel] = useState<AccessLevel>("view")
-  const shareLink = `https://example.com/share/${pageId}`
+  const [shareLink, setShareLink] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
+  const [error, setError] = useState("")
+  const [invitedUsers, setInvitedUsers] = useState<any[]>([])
 
-  const handleInvite = () => {
-    if (email.trim()) {
-      console.log("Invite user:", email, "to page:", pageId)
-      setEmail("")
+  // Load page share settings
+  useEffect(() => {
+    const loadPageData = async () => {
+      try {
+        const response = await apiClient.getPage(pageId)
+        if (response.success) {
+          const page = response.data
+          setShareLink(page.permissions?.shareLink 
+            ? `${window.location.origin}/shared/${pageId}?token=${page.permissions.shareLink}`
+            : "")
+          setInvitedUsers(page.permissions?.invitedUsers || [])
+        }
+      } catch (error) {
+        console.error('Failed to load page data:', error)
+      }
+    }
+    loadPageData()
+  }, [pageId])
+
+  const handleInvite = async () => {
+    if (!email.trim()) return
+    
+    setIsLoading(true)
+    setError("")
+    
+    try {
+      const response = await apiClient.sharePage(pageId, { 
+        email: email.trim(), 
+        role: accessLevel === "edit" ? "editor" : "viewer" 
+      })
+      
+      if (response.success) {
+        setInvitedUsers(response.data)
+        setEmail("")
+      }
+    } catch (error: any) {
+      setError(error.message || "Failed to invite user")
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleCopyLink = () => {
-    console.log("Copy share link for page:", pageId)
-    // In a real implementation, this would copy the link to clipboard
-    // navigator.clipboard.writeText(shareLink)
+  const handleCopyLink = async () => {
+    if (!shareLink) {
+      // Generate share link first
+      try {
+        setIsLoading(true)
+        const response = await apiClient.updatePage(pageId, { 
+          permissions: { publicAccess: "read-only" } 
+        })
+        
+        if (response.success && response.data.permissions?.shareLink) {
+          const newLink = `${window.location.origin}/shared/${pageId}?token=${response.data.permissions.shareLink}`
+          setShareLink(newLink)
+          await navigator.clipboard.writeText(newLink)
+          setCopySuccess(true)
+          setTimeout(() => setCopySuccess(false), 2000)
+        }
+      } catch (error) {
+        setError("Failed to generate share link")
+      } finally {
+        setIsLoading(false)
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareLink)
+        setCopySuccess(true)
+        setTimeout(() => setCopySuccess(false), 2000)
+      } catch (error) {
+        setError("Failed to copy link")
+      }
+    }
   }
 
-  const handleAccessChange = (level: AccessLevel) => {
+  const handleAccessChange = async (level: AccessLevel) => {
     setAccessLevel(level)
-    console.log("Set link access to:", level, "for page:", pageId)
+    
+    try {
+      setIsLoading(true)
+      const publicAccess = level === "restricted" ? "none" : "read-only"
+      await apiClient.updatePage(pageId, { 
+        permissions: { publicAccess } 
+      })
+    } catch (error) {
+      setError("Failed to update access level")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -69,13 +146,36 @@ export default function ShareModal({ pageId, onClose }: ShareModalProps) {
             />
             <button
               onClick={handleInvite}
-              disabled={!email.trim()}
+              disabled={!email.trim() || isLoading}
               className="px-4 py-2 bg-[#79B791] text-white rounded-r-md hover:bg-[#ABD1B5] disabled:opacity-50 disabled:hover:bg-[#79B791] transition-colors"
             >
-              Invite
+              {isLoading ? "Inviting..." : "Invite"}
             </button>
           </div>
+          {error && (
+            <p className="text-sm text-red-600 mt-2">{error}</p>
+          )}
         </div>
+
+        {/* Invited Users */}
+        {invitedUsers.length > 0 && (
+          <div className="mb-4">
+            <h4 className="text-sm font-medium text-[#13262F] mb-2">Invited Users</h4>
+            <div className="space-y-2">
+              {invitedUsers.map((user: any) => (
+                <div key={user.user._id} className="flex items-center justify-between p-2 bg-white rounded border border-[#ABD1B5]/30">
+                  <div className="flex items-center">
+                    <div className="w-6 h-6 bg-[#79B791] text-white rounded-full flex items-center justify-center text-xs">
+                      {user.user.username[0].toUpperCase()}
+                    </div>
+                    <span className="ml-2 text-sm text-[#13262F]">{user.user.email}</span>
+                  </div>
+                  <span className="text-xs text-[#13262F]/70 capitalize">{user.role}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* General access */}
         <div className="mb-6">
@@ -87,11 +187,16 @@ export default function ShareModal({ pageId, onClose }: ShareModalProps) {
             <span className="text-sm text-[#13262F] truncate flex-1">{shareLink}</span>
             <button
               onClick={handleCopyLink}
-              className="ml-2 p-1.5 rounded hover:bg-[#ABD1B5]/20 transition-colors"
-              aria-label="Copy link"
-              title="Copy link"
+              disabled={isLoading}
+              className={`ml-2 p-1.5 rounded transition-colors ${
+                copySuccess 
+                  ? "text-green-600" 
+                  : "hover:bg-[#ABD1B5]/20"
+              } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+              aria-label={copySuccess ? "Copied!" : "Copy link"}
+              title={copySuccess ? "Copied!" : "Copy link"}
             >
-              <Copy className="h-4 w-4" />
+              {copySuccess ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </button>
           </div>
 

@@ -1,5 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
+import "./globals.css"
 import ClientPage from "./ClientPage"
 import dynamic from "next/dynamic"
 
@@ -25,8 +26,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <ClientPage>{children}</ClientPage>
+  return (
+    <html lang="en">
+      <body>
+        <ClientPage>{children}</ClientPage>
+      </body>
+    </html>
+  )
 }
-
-
-import './globals.css'

@@ -116,7 +116,7 @@ export default function Sidebar({ pages = [], selectedPageId, onNavigate, onTogg
   }
 
   return (
-    <div className="flex flex-col h-screen w-64 bg-[#13262F] text-[#EDF4ED] border-r border-[#79B791]/20">
+    <div className="flex flex-col h-screen w-full sm:w-72 md:w-80 lg:w-64 bg-[#13262F] text-[#EDF4ED] border-r border-[#79B791]/20">
       {/* Workspace Selector */}
       <div className="relative p-3 border-b border-[#79B791]/20">
         <button

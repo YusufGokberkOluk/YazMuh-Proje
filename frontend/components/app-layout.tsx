@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Menu, X } from "lucide-react"
 import Sidebar from "./sidebar"
 import Editor from "./editor"
 
@@ -43,6 +44,7 @@ export default function AppLayout() {
   const [selectedPageId, setSelectedPageId] = useState("1")
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle")
   const [saveTimer, setSaveTimer] = useState<NodeJS.Timeout | null>(null)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   // Find the currently selected page
   const selectedPage = pages.find((page) => page.id === selectedPageId) || pages[0]
@@ -106,8 +108,22 @@ export default function AppLayout() {
 
   // Update the return statement to handle mobile responsiveness better
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+    <div className="flex flex-col min-h-screen relative">
+      {/* Mobile Header */}
+      <div className="md:hidden bg-[#13262F] text-white p-4 flex items-center justify-between">
+        <button
+          onClick={() => setIsMobileSidebarOpen(true)}
+          className="p-2 hover:bg-white/10 rounded-md"
+          aria-label="Open menu"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <h1 className="text-lg font-semibold truncate">{selectedPage.title}</h1>
+        <div className="w-9" /> {/* Spacer for alignment */}
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Desktop Sidebar */}
         <div className="hidden md:block">
           <Sidebar
             pages={pages}
@@ -116,16 +132,51 @@ export default function AppLayout() {
             onToggleFavorite={handleToggleFavorite}
           />
         </div>
-        <div className="flex-1 p-2 md:p-4 overflow-auto bg-[#f8faf8]">
-          <Editor
-            title={selectedPage.title}
-            pageId={selectedPage.id}
-            initialContent={selectedPage.content}
-            initialTags={selectedPage.tags}
-            saveStatus={saveStatus}
-            onChange={handleContentChange}
-            onTagsChange={handleTagsChange}
-          />
+
+        {/* Mobile Sidebar Overlay */}
+        {isMobileSidebarOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div 
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setIsMobileSidebarOpen(false)}
+            />
+            <div className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-[#13262F] overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b border-[#79B791]/20">
+                <h2 className="text-lg font-semibold text-white">Menu</h2>
+                <button
+                  onClick={() => setIsMobileSidebarOpen(false)}
+                  className="p-2 hover:bg-white/10 rounded-md text-white"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <Sidebar
+                pages={pages}
+                selectedPageId={selectedPageId}
+                onNavigate={(pageId) => {
+                  handleNavigate(pageId);
+                  setIsMobileSidebarOpen(false);
+                }}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto bg-[#f8faf8]">
+          <div className="p-2 md:p-4">
+            <Editor
+              title={selectedPage.title}
+              pageId={selectedPage.id}
+              initialContent={selectedPage.content}
+              initialTags={selectedPage.tags}
+              saveStatus={saveStatus}
+              onChange={handleContentChange}
+              onTagsChange={handleTagsChange}
+            />
+          </div>
         </div>
       </div>
     </div>
